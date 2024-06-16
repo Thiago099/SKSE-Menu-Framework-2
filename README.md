@@ -5,10 +5,6 @@
 - COMMONLIB_SSE_FOLDER
 
   Clone [this](https://github.com/CharmedBaryon/CommonLibSSE-NG) Repository, to somewhere safe and adds its path to this environment variable on Windows.
-
-- IMGUI_LIB_FOLDER
-
-  Clone [this](https://github.com/Thiago099/SKSE-Menu-Framework-SDK/tree/main)  Repository, to somewhere safe and adds its ImGui folder path to this environment variable on Windows.
   
 ## Optional ouput folder optional variables
 
