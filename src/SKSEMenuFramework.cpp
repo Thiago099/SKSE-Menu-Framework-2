@@ -18,95 +18,52 @@ UI::WindowInterface* AddWindow(UI::RenderFunction rendererFunction) {
 
 }
 
-void ProcessFont() {
-    UI::FontContainer container;
-    bool regular = false;
-    if (UI::currentFont & UI::Font::fontSizeSmall) 
-    {
-        container = UI::fontSizes["Small"];
-    } 
-    else if (UI::currentFont & UI::Font::fontSizeBig) 
-    {
-        container = UI::fontSizes["Big"];
-    } 
-    else if (UI::currentFont & UI::Font::fontSizeDefault) 
-    {
-        regular = true;
-        container = UI::fontSizes["Default"];
-    }
-    if (UI::currentFont & UI::Font::faSolid) 
-    {
 
-        if (container.faSolid){
-            ImGui::PushFont(container.faSolid);
-        }
-    } 
-    else if (UI::currentFont & UI::Font::faRegular) 
-    {
-        if (container.faRegular) {
-            ImGui::PushFont(container.faRegular);
-        }
-    }
-    else if (UI::currentFont & UI::Font::faBrands) 
-    {
-        if (container.faBrands) {
-            ImGui::PushFont(container.faBrands);
-        }
-    } 
-    else 
-    {
-        if (regular) {
-            Pop();
-        }
-        else if (container.defaultFont) {
-            ImGui::PushFont(container.defaultFont);
-        }
-    }
-}
 
-void PushDefault() {
+void PushDefault() 
+{
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeBig);
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeSmall);
     UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::fontSizeDefault);
-    ProcessFont();
+    UI::ProcessFont();
 }
-void PushBig() {
+void PushBig() 
+{
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeDefault);
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeSmall);
     UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::fontSizeBig);
-    ProcessFont();
+    UI::ProcessFont();
 }
-void PushSmall() {
+void PushSmall() 
+{
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeDefault);
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeBig);
     UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::fontSizeSmall);
-    ProcessFont();
+    UI::ProcessFont();
 }
 
-void PushSolid() {
+void PushSolid() 
+{
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faBrands);
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faRegular);
     UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::faSolid);
-    ProcessFont();
+    UI::ProcessFont();
 }
 
-void PushRegular() { 
+void PushRegular() 
+{
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faSolid);
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faBrands);
     UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::faRegular);
-    ProcessFont();
+    UI::ProcessFont();
 }
 
-void PushBrands() {
+void PushBrands() 
+{
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faSolid);
     UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faRegular);
     UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::faBrands);
-    ProcessFont();
+    UI::ProcessFont();
 }
 
-void Pop() {
-    auto ctx = ImGui::GetCurrentContext();
-    ctx->FontStack.clear();
-    UI::currentFont = UI::Font::none;
-    ImGui::SetCurrentFont(ImGui::GetDefaultFont());
-}
+void Pop() { UI::CleanFont(); }

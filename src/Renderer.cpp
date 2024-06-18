@@ -145,10 +145,7 @@ void UI::DXGIPresentHook::thunk(std::uint32_t a_timer) {
     ImGui::EndFrame();
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-    auto ctx = ImGui::GetCurrentContext();
-    ctx->FontStack.clear();
-    currentFont = Font::none;
-    ImGui::SetCurrentFont(ImGui::GetDefaultFont());
+    CleanFont();
 }
 
 bool ProcessOpenClose(RE::InputEvent* const* evns) {
@@ -253,6 +250,58 @@ UI::FontContainer UI::LoadFontAwesome(ImGuiIO& io, float size) {
     }
 
     return result;
+}
+void UI::CleanFontStack() {
+    auto ctx = ImGui::GetCurrentContext();
+    while (ctx->FontStack.size() > 0) {
+        ImGui::PopFont();
+    }
+}
+void UI::CleanFont() {
+    CleanFontStack();
+    UI::currentFont = UI::Font::fontSizeDefault;
+}
+
+void UI::SetFont(UI::Font font) {
+    UI::currentFont = font;
+    ProcessFont();
+}
+
+void UI::ProcessFont() {
+    UI::FontContainer container;
+    if (UI::currentFont & UI::Font::fontSizeSmall) 
+    {
+        container = UI::fontSizes["Small"];
+    } 
+    else if (UI::currentFont & UI::Font::fontSizeBig) 
+    {
+        container = UI::fontSizes["Big"];
+    } 
+    else if (UI::currentFont & UI::Font::fontSizeDefault) 
+    {
+        container = UI::fontSizes["Default"];
+    }
+    if (UI::currentFont & UI::Font::faSolid) 
+    {
+        if (container.faSolid) 
+        {
+            ImGui::PushFont(container.faSolid);
+        }
+    } 
+    else if (UI::currentFont & UI::Font::faRegular) 
+    {
+        if (container.faRegular) 
+        {
+            ImGui::PushFont(container.faRegular);
+        }
+    } 
+    else if (UI::currentFont & UI::Font::faBrands) 
+    {
+        if (container.faBrands) 
+        {
+            ImGui::PushFont(container.faBrands);
+        }
+    }
 }
 
 void UI::ModernStyle() {

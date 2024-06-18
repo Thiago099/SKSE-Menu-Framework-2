@@ -85,6 +85,9 @@ namespace UI {
     inline std::map<std::string, FontContainer> fontSizes;
     FontContainer LoadFontAwesome(ImGuiIO& io, float size);
 
+    void CleanFontStack();
+    void CleanFont();
+
     enum Font {
 
         none = 0,
@@ -95,7 +98,10 @@ namespace UI {
         fontSizeDefault = 1 << 4,
         fontSizeBig = 1 << 5,
     };
-    inline Font currentFont = Font::none;
+    inline Font currentFont = UI::Font::fontSizeDefault;
+
+    void ProcessFont();
+    void SetFont(UI::Font font);
 
 }
 
