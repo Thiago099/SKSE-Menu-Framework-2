@@ -29,6 +29,14 @@ void __stdcall UI::Example1::Render() {
 
 You should create a function in order to register your menu entries:
 
+You should check if the user has the menu framework installed before doing anything in the register function
+
+```cpp
+if (!SKSEMenuFramework::IsInstalled()) {
+    return;
+}
+```
+
 Before registering any entries, you should choose a section for your menu to be in. It is recommended that you use your mod name as the section name to keep things organized
 
 ```cpp
