@@ -1,10 +1,5 @@
 #include "Renderer.h"
 
-ImFont* UI::faSolid = nullptr;
-ImFont* UI::faRegular = nullptr;
-ImFont* UI::faBrands = nullptr;
-ImFont* UI::defaultFont = nullptr;
-
 std::vector<UI::Window*> UI::Windows;
 
 GameLock::State GameLock::lastState = GameLock::State::None;
@@ -108,12 +103,21 @@ void UI::D3DInitHook::thunk() {
         ModernStyle();
     }
 
-    LoadSkyrimFont(io);
-    LoadFontAwesome(io);
+    auto regular = LoadFontAwesome(io, 32.0f);
+    io.FontDefault = regular.defaultFont;
+
+    fontSizes["Big"] = LoadFontAwesome(io, 64.0f);
+    fontSizes["Small"] = LoadFontAwesome(io, 16.0f);
+    fontSizes["Default"] = regular; 
+
+    io.Fonts->Build();
+
 
     logger::debug("[D3DInitHook] FINISH");
 }
 void UI::DXGIPresentHook::thunk(std::uint32_t a_timer) {
+
+
     originalFunction(a_timer);
 
     if (!Renderer::initialized.load()) {
@@ -141,6 +145,10 @@ void UI::DXGIPresentHook::thunk(std::uint32_t a_timer) {
     ImGui::EndFrame();
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    auto ctx = ImGui::GetCurrentContext();
+    ctx->FontStack.clear();
+    currentFont = Font::none;
+    ImGui::SetCurrentFont(ImGui::GetDefaultFont());
 }
 
 bool ProcessOpenClose(RE::InputEvent* const* evns) {
@@ -214,7 +222,13 @@ ImFont* GetFont(ImGuiIO& io, std::string name, float size,
 #define ICON_MIN_FA 0xe005
 #define ICON_MAX_FA 0xf8ff
 
-void UI::LoadFontAwesome(ImGuiIO& io) {
+UI::FontContainer UI::LoadFontAwesome(ImGuiIO& io, float size) {
+
+    auto result = FontContainer();
+
+    if (auto skyrimFont = GetFont(io, "SkyrimMenuFont.ttf", size)) {
+        result.defaultFont = skyrimFont;
+    }
 
     static const ImWchar icons_ranges[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
 
@@ -222,30 +236,23 @@ void UI::LoadFontAwesome(ImGuiIO& io) {
     icons_config.MergeMode = true;
     icons_config.PixelSnapH = true;
 
-    if (auto regularFont = GetFont(io, "SkyrimMenuFont.ttf", 32, NULL, io.Fonts->GetGlyphRangesDefault())) {
-        if (GetFont(io, "fa-regular-400.ttf", 32, &icons_config, icons_ranges)) {
-            UI::faRegular = regularFont;
+    if (auto regularFont = GetFont(io, "SkyrimMenuFont.ttf", size, NULL, io.Fonts->GetGlyphRangesDefault())) {
+        if (GetFont(io, "fa-regular-400.ttf", size, &icons_config, icons_ranges)) {
+            result.faRegular = regularFont;
         }
     }
-    if (auto solidFont = GetFont(io, "SkyrimMenuFont.ttf", 32, NULL, io.Fonts->GetGlyphRangesDefault())) {
-        if (GetFont(io, "fa-solid-900.ttf", 32, &icons_config, icons_ranges)) {
-            UI::faSolid = solidFont;
+    if (auto solidFont = GetFont(io, "SkyrimMenuFont.ttf", size, NULL, io.Fonts->GetGlyphRangesDefault())) {
+        if (GetFont(io, "fa-solid-900.ttf", size, &icons_config, icons_ranges)) {
+            result.faSolid = solidFont;
         }
     }
-    if (auto brandsFont = GetFont(io, "SkyrimMenuFont.ttf", 32, NULL, io.Fonts->GetGlyphRangesDefault())) {
-        if (GetFont(io, "fa-brands-400.ttf", 32, &icons_config, icons_ranges)) {
-            UI::faBrands = brandsFont;
+    if (auto brandsFont = GetFont(io, "SkyrimMenuFont.ttf", size, NULL, io.Fonts->GetGlyphRangesDefault())) {
+        if (GetFont(io, "fa-brands-400.ttf", size, &icons_config, icons_ranges)) {
+            result.faBrands = brandsFont;
         }
     }
 
-    io.Fonts->Build();
-}
-
-void UI::LoadSkyrimFont(ImGuiIO& io) {
-    if (auto skyrimFont = GetFont(io, "SkyrimMenuFont.ttf", 32)) {
-        defaultFont = skyrimFont;
-        io.FontDefault = skyrimFont;
-    }
+    return result;
 }
 
 void UI::ModernStyle() {

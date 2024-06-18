@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 3.21)
 set(AUTHOR_NAME "SkyrimThiago")
 set(PRODUCT_NAME "SKSEMenuFramework")
 set(BEAUTIFUL_NAME "SKSE Menu Framework")
-project(${PRODUCT_NAME} VERSION 2.0.0.0 LANGUAGES CXX)
+project(${PRODUCT_NAME} VERSION 2.1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
@@ -78,7 +78,6 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends
 )
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE IS_HOST_PLUGIN)
 
 set(wildlander_output false)
 set(steam_owrt_output false)
