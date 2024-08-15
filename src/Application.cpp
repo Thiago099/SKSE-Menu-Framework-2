@@ -13,7 +13,7 @@ std::vector<std::string> SplitString(const std::string& input, char delimiter) {
     return parts;
 }
 
-int GetKeyBinding(std::string input) {
+int GetKeyBinding(std::string input, RE::INPUT_DEVICE device) {
 
     std::transform(input.begin(), input.end(), input.begin(), [](char c) { return static_cast<char>(std::toupper(c)); });
 
@@ -124,8 +124,29 @@ int GetKeyBinding(std::string input) {
         {"RIGHTWIN", 0xDC},
     };
 
-    auto it = keymap.find(input);
-    if (it != keymap.end()) {
+    const std::unordered_map<std::string, int> keymapGP = {
+        {"NONE", 0},
+        {"DPAD_UP", 1}, //2^0
+        {"DPAD_DOWN", 2},  // 2^1
+        {"DPAD_LEFT", 4},  // 2^2
+        {"DPAD_RIGHT", 8}, // 2^3
+        {"START", 16}, // 2^4
+        {"BACK", 32}, // 2^5
+        {"LS", 64}, // 2^6
+        {"RS", 128}, // 2^7
+        {"LB", 256}, // 2^8
+        {"RB", 512}, // 2^9
+        {"LT", 9}, // 2^10 ??
+        {"RT", 10}, // 2^11 ??
+        {"A", 4096}, // 2^12
+        {"B", 8192}, // 2^13
+        {"X", 16384}, // 2^14
+        {"Y", 32768}, // 2^15
+    };
+    
+    const auto& temp_map = device == RE::INPUT_DEVICES::kKeyboard ? keymap : keymapGP;
+    auto it = temp_map.find(input);
+    if (it != temp_map.end()) {
         return it->second;
     } else {
         return 0x0;

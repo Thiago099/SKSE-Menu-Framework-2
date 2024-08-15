@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
-  "name": "deneme",
-  "version-string": "0.1",
+  "name": "sksemenuframework",
+  "version-string": "2.1.1.0",
   "dependencies": [
     "fast-cpp-csv-parser",
     "rsm-binary-io",

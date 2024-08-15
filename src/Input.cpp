@@ -306,3 +306,32 @@ void UI::TranslateInputEvent(RE::InputEvent* const* a_event) {
         }
     }
 }
+
+void DoublePressDetector::press(){
+    auto now = std::chrono::steady_clock::now();
+    if (last_pressed_index) {
+        last_pressed_times.second = now;
+    } else {
+        last_pressed_times.first = now;
+    }
+    increment();
+};
+
+DoublePressDetector::operator bool() const {
+    const auto [first, second] = last_pressed_times;
+    const int diff = static_cast<int>(std::chrono::duration_cast<std::chrono::milliseconds>(second - first).count());
+    return std::abs(diff) < double_press_threshold;
+    
+}
+void DoublePressDetector::reset(){ last_pressed_times = {Timestamp::min(), Timestamp::min()};};
+void DoublePressDetector::increment(){ last_pressed_index = !last_pressed_index; };
+
+bool IsSupportedDevice(RE::INPUT_DEVICE device) {
+    switch (device) {
+        case kKeyboard:
+        case kGamepad:
+            return true;
+        default:
+            return false;
+    }
+}
