@@ -154,8 +154,10 @@ bool ProcessOpenClose(RE::InputEvent* const* evns) {
     for (RE::InputEvent* e = *evns; e; e = e->next) {
         if (e->eventType.get() != RE::INPUT_EVENT_TYPE::kButton) continue;
         const RE::ButtonEvent* a_event = e->AsButtonEvent();
-        if (!IsSupportedDevice(a_event->GetDevice())) continue;
-        if (a_event->GetIDCode() == Config::ToggleKey) {
+        const auto temp_device = a_event->GetDevice();
+        if (!IsSupportedDevice(temp_device)) continue;
+        const auto temp_toggleKey = temp_device == RE::INPUT_DEVICE::kKeyboard ? Config::ToggleKey : Config::ToggleKeyGP;
+        if (a_event->GetIDCode() == temp_toggleKey) {
             if (a_event->IsDown()) DPD.press();
             if (Config::ToggleMode == 0 && a_event->IsDown() ||
                 Config::ToggleMode == 1 && a_event->HeldDuration() > 0.2f && a_event->IsUp() ||
@@ -165,7 +167,7 @@ bool ProcessOpenClose(RE::InputEvent* const* evns) {
             
             };
         }
-        if (a_event->GetIDCode() == REX::W32::DIK_ESCAPE) {
+        if (a_event->GetIDCode() == REX::W32::DIK_ESCAPE && temp_device == RE::INPUT_DEVICE::kKeyboard) {
             bool hasChanged = UI::MainInterface->IsOpen.load();
             UI::MainInterface->IsOpen = false;
             return hasChanged;
