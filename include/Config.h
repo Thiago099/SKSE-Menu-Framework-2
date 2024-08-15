@@ -11,6 +11,7 @@ class Config {
     public:
     static void Init();
     static unsigned int ToggleKey;
+    static unsigned int ToggleMode;  // 0 = Toggle, 1 = Hold, 2 = Double Press
     static bool FreezeTimeOnMenu;
     static bool BlurBackgroundOnMenu;
     static MenuStyle MenuStyle;

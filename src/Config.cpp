@@ -1,6 +1,7 @@
 #include "Config.h"
 
 unsigned int Config::ToggleKey = 0x3B;
+unsigned int Config::ToggleMode = 0;
 bool Config::FreezeTimeOnMenu = true;
 MenuStyle Config::MenuStyle = MenuStyle::Skyrim;
 bool Config::BlurBackgroundOnMenu = true;
@@ -27,6 +28,7 @@ void Config::Init() {
     ini->SetSection("General");
 
     ToggleKey = GetKeyBinding(ini->GetString("ToggleKey", "f1"));
+    ToggleMode = ini->GetInt("ToggleMode", 0);
     FreezeTimeOnMenu = ini->GetBool("FreezeTimeOnMenu", true);
     BlurBackgroundOnMenu = ini->GetBool("BlurBackgroundOnMenu", true);
     auto menuStyleStr = toUpperCase(ini->GetString("MenuStyle", "SKYRIM"));
