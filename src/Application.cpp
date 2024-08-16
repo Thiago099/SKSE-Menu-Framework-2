@@ -12,6 +12,24 @@ std::vector<std::string> SplitString(const std::string& input, char delimiter) {
 
     return parts;
 }
+uint8_t GetToggleMode(std::string input) {
+
+    std::transform(input.begin(), input.end(), input.begin(),
+                   [](char c) { return static_cast<char>(std::toupper(c)); });
+
+    const std::unordered_map<std::string, uint8_t> map = {
+        {"SINGLEPRESS", 0},
+        {"HOLD", 1},
+        {"DOUBLEPRESS", 2}
+    };
+    auto it = map.find(input);
+    if (it != map.end()) {
+        logger::trace("its {}", it->second);
+        return it->second;
+    } else {
+        return 0x0;
+    }
+}
 
 int GetKeyBinding(std::string input, RE::INPUT_DEVICE device) {
 

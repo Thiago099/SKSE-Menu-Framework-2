@@ -156,16 +156,33 @@ bool ProcessOpenClose(RE::InputEvent* const* evns) {
         const RE::ButtonEvent* a_event = e->AsButtonEvent();
         const auto temp_device = a_event->GetDevice();
         if (!IsSupportedDevice(temp_device)) continue;
-        const auto temp_toggleKey = temp_device == RE::INPUT_DEVICE::kKeyboard ? Config::ToggleKey : Config::ToggleKeyGP;
+        const auto temp_toggleKey = temp_device == RE::INPUT_DEVICE::kKeyboard ? Config::ToggleKey : Config::ToggleKeyGamePad;
         if (a_event->GetIDCode() == temp_toggleKey) {
-            if (a_event->IsDown()) DPD.press();
-            if (Config::ToggleMode == 0 && a_event->IsDown() ||
-                Config::ToggleMode == 1 && a_event->HeldDuration() > 0.2f && a_event->IsUp() ||
-                Config::ToggleMode == 2 && DPD && a_event->IsDown()) {
-                UI::MainInterface->IsOpen = !UI::MainInterface->IsOpen.load();
-                return true;
-            
-            };
+
+            if (UI::MainInterface->IsOpen.load() && a_event->IsDown()) {
+                UI::MainInterface->IsOpen = false;
+            } else {
+
+                if (temp_device == RE::INPUT_DEVICE::kKeyboard) {
+                    if (a_event->IsDown()) DoublePressDetectorKeyboard.press();
+
+                    if (Config::ToggleMode == 0 && a_event->IsDown() ||
+                        Config::ToggleMode == 1 && a_event->HeldDuration() > 0.2f && a_event->IsUp() ||
+                        Config::ToggleMode == 2 && DoublePressDetectorKeyboard && a_event->IsDown()) {
+                        UI::MainInterface->IsOpen = true;
+                        return true;
+                    };
+                } else {
+                    if (a_event->IsDown()) DoublePressDetectorGamepad.press();
+                    if (Config::ToggleModeGamePad == 0 && a_event->IsDown() ||
+                        Config::ToggleModeGamePad == 1 && a_event->HeldDuration() > 0.2f && a_event->IsUp() ||
+                        Config::ToggleModeGamePad == 2 && DoublePressDetectorGamepad && a_event->IsDown()) {
+                        UI::MainInterface->IsOpen = true;
+                        return true;
+                    };
+                }
+
+            }
         }
         if (a_event->GetIDCode() == REX::W32::DIK_ESCAPE && temp_device == RE::INPUT_DEVICE::kKeyboard) {
             bool hasChanged = UI::MainInterface->IsOpen.load();
@@ -475,4 +492,6 @@ void UI::TransparentStyle() {
     colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
     colors[ImGuiCol_NavWindowingDimBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.6f);
     colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.6f);
+
+    colors[ImGuiCol_NavHighlight] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
 }

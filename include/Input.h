@@ -20,7 +20,8 @@ private:
 
 };
 
-static DoublePressDetector DPD;
+static DoublePressDetector DoublePressDetectorKeyboard;
+static DoublePressDetector DoublePressDetectorGamepad;
 
 enum SupportedDevices { kKeyboard = RE::INPUT_DEVICE::kKeyboard, kGamepad = RE::INPUT_DEVICE::kGamepad};
 

@@ -8,6 +8,8 @@
 
 std::vector<std::string> SplitString(const std::string& input, char delimiter);
 
+uint8_t GetToggleMode(std::string input);
+
 int GetKeyBinding(std::string input, RE::INPUT_DEVICE device = RE::INPUT_DEVICE::kKeyboard);
 namespace Utils {
     class Ini {

@@ -33,7 +33,14 @@ void RenderNode(std::pair<const std::string, UI::MenuTree*>& node) {
         node_flags |= ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_NoTreePushOnOpen;
     }
     bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)node_id, node_flags, node.first.c_str(), node_id);
-    if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+
+
+    bool itemClicked = ImGui::IsItemClicked();
+    bool itemToggledOpen = ImGui::IsItemToggledOpen();
+    bool gamepadButtonPressed = ImGui::IsKeyPressed(ImGuiKey_GamepadFaceDown);  // Typically A button
+    bool itemIsFocused = ImGui::IsItemFocused();  // Check if the item is focused/highlighted by gamepad navigation
+
+    if ((itemClicked || (gamepadButtonPressed && itemIsFocused)) && !itemToggledOpen) {
         if (node.second->Render) {
             item_current_idx = node_id;
             display_node = node.second;

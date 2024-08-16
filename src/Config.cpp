@@ -1,8 +1,9 @@
 #include "Config.h"
 
 unsigned int Config::ToggleKey = 0x3B;
-unsigned int Config::ToggleKeyGP = 0;
-unsigned int Config::ToggleMode = 0;
+uint8_t Config::ToggleMode = 0;
+unsigned int Config::ToggleKeyGamePad = 0;
+uint8_t Config::ToggleModeGamePad = 0;
 bool Config::FreezeTimeOnMenu = true;
 MenuStyle Config::MenuStyle = MenuStyle::Skyrim;
 bool Config::BlurBackgroundOnMenu = true;
@@ -29,8 +30,11 @@ void Config::Init() {
     ini->SetSection("General");
 
     ToggleKey = GetKeyBinding(ini->GetString("ToggleKey", "f1"));
-    ToggleKeyGP = GetKeyBinding(ini->GetString("ToggleKeyGP", ""),RE::INPUT_DEVICE::kGamepad);
-    ToggleMode = ini->GetInt("ToggleMode", 0);
+    ToggleMode = GetToggleMode(ini->GetString("ToggleMode", "SinglePress"));
+
+    ToggleKeyGamePad = GetKeyBinding(ini->GetString("ToggleKeyGamePad", ""),RE::INPUT_DEVICE::kGamepad);
+    ToggleModeGamePad = GetToggleMode(ini->GetString("ToggleModeGamePad", "DoublePress"));
+
     FreezeTimeOnMenu = ini->GetBool("FreezeTimeOnMenu", true);
     BlurBackgroundOnMenu = ini->GetBool("BlurBackgroundOnMenu", true);
     auto menuStyleStr = toUpperCase(ini->GetString("MenuStyle", "SKYRIM"));
