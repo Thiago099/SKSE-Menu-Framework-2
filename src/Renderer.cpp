@@ -167,7 +167,7 @@ bool ProcessOpenClose(RE::InputEvent* const* evns) {
                     if (a_event->IsDown()) DoublePressDetectorKeyboard.press();
 
                     if (Config::ToggleMode == 0 && a_event->IsDown() ||
-                        Config::ToggleMode == 1 && a_event->HeldDuration() > 0.2f && a_event->IsUp() ||
+                        Config::ToggleMode == 1 && a_event->HeldDuration() > 0.2f||
                         Config::ToggleMode == 2 && DoublePressDetectorKeyboard && a_event->IsDown()) {
                         UI::MainInterface->IsOpen = true;
                         return true;
@@ -175,7 +175,7 @@ bool ProcessOpenClose(RE::InputEvent* const* evns) {
                 } else {
                     if (a_event->IsDown()) DoublePressDetectorGamepad.press();
                     if (Config::ToggleModeGamePad == 0 && a_event->IsDown() ||
-                        Config::ToggleModeGamePad == 1 && a_event->HeldDuration() > 0.2f && a_event->IsUp() ||
+                        Config::ToggleModeGamePad == 1 && a_event->HeldDuration() > 0.2f ||
                         Config::ToggleModeGamePad == 2 && DoublePressDetectorGamepad && a_event->IsDown()) {
                         UI::MainInterface->IsOpen = true;
                         return true;
