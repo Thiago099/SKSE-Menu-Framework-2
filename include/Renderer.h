@@ -23,18 +23,42 @@ namespace UI {
     inline WindowInterface* MainInterface;
 
     typedef void(__stdcall* RenderFunction)();
+    typedef void(__stdcall* OpenCloseCallback)(bool open);
 
     class WindowInterface {
         public:
         std::atomic<bool> IsOpen{false};
     };
+
     class Window {
+        void DispatchEvents() {
+            bool isOpen = Interface->IsOpen.load();
+
+            if (LastIsOpen.load() != isOpen) {
+                for (auto [key, value] : OpenCloseEvent) {
+                    value(isOpen);
+                }
+            }
+
+            LastIsOpen = isOpen;
+        }
     public:
         Window() {
             Interface= new WindowInterface;
         }
+        void Open() {
+            Interface->IsOpen = true;
+            DispatchEvents();
+        }
+        void Close() {
+            Interface->IsOpen = false;
+            DispatchEvents();
+        }
+        std::atomic<bool> LastIsOpen{false};
         WindowInterface* Interface;
         RenderFunction Render;
+        unsigned long open_close_event_id = 0;
+        std::map<unsigned long, OpenCloseCallback> OpenCloseEvent;
     };
 
     extern std::vector<UI::Window*> Windows;

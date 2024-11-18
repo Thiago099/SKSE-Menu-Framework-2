@@ -161,6 +161,7 @@ bool ProcessOpenClose(RE::InputEvent* const* evns) {
 
             if (UI::MainInterface->IsOpen.load() && a_event->IsDown()) {
                 UI::MainInterface->IsOpen = false;
+                return true;
             } else {
 
                 if (temp_device == RE::INPUT_DEVICE::kKeyboard) {
@@ -186,6 +187,12 @@ bool ProcessOpenClose(RE::InputEvent* const* evns) {
         }
         if (a_event->GetIDCode() == REX::W32::DIK_ESCAPE && temp_device == RE::INPUT_DEVICE::kKeyboard) {
             bool hasChanged = UI::MainInterface->IsOpen.load();
+            for (auto window : UI::Windows) {
+                if (window->Interface->IsOpen.load()) {
+                    hasChanged = true;
+                }
+                window->Close();
+            }
             UI::MainInterface->IsOpen = false;
             return hasChanged;
         }

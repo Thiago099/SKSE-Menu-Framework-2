@@ -18,6 +18,49 @@ UI::WindowInterface* AddWindow(UI::RenderFunction rendererFunction) {
 
 }
 
+unsigned long WindowAddOpenCloseEvent(UI::WindowInterface* window, UI::OpenCloseCallback callback) { 
+    for (auto win : UI::Windows) {
+        if (win->Interface == window) {
+            auto id = win->open_close_event_id++;
+            win->OpenCloseEvent[id] = callback;
+            return id;
+        }
+    }
+    return 0;
+}
+
+void WindowRemoveOpenCloseEvent(UI::WindowInterface* window, long id) {
+    for (auto win : UI::Windows) {
+        if (win->Interface == window) {
+            auto it = win->OpenCloseEvent.find(id);
+
+            if (it != win->OpenCloseEvent.end()) {
+                win->OpenCloseEvent.erase(it);
+            }
+
+            return;
+        }
+    }
+}
+
+void WindowOpen(UI::WindowInterface* window) {
+    for (auto win : UI::Windows) {
+        if (win->Interface == window) {
+            win->Open();
+            return;
+        }
+    }
+}
+
+void WindowClose(UI::WindowInterface* window) {
+    for (auto win : UI::Windows) {
+        if (win->Interface == window) {
+            win->Close();
+            return;
+        }
+    }
+}
+
 
 
 void PushDefault() 
