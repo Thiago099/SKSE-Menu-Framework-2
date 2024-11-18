@@ -479,9 +479,9 @@ void UI::TransparentStyle() {
     colors[ImGuiCol_ResizeGripHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
     colors[ImGuiCol_ResizeGripActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
 
-    colors[ImGuiCol_Tab] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
+    colors[ImGuiCol_Tab] = ImVec4(1.0f, 1.0f, 1.0f, 0.1f);
     colors[ImGuiCol_TabHovered] = ImVec4(1.0f, 1.0f, 1.0f, 0.2f);
-    colors[ImGuiCol_TabActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
+    colors[ImGuiCol_TabActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.3f);
 
     colors[ImGuiCol_TabUnfocused] = ImVec4(1.0f, 1.0f, 1.0f, 0.0f);
     colors[ImGuiCol_TabUnfocusedActive] = ImVec4(1.0f, 1.0f, 1.0f, 0.4f);
@@ -501,4 +501,7 @@ void UI::TransparentStyle() {
     colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.0f, 0.0f, 0.0f, 0.6f);
 
     colors[ImGuiCol_NavHighlight] = ImVec4(0.26f, 0.59f, 0.98f, 1.00f);
+
+    colors[ImGuiCol_TableBorderLight] = ImVec4(1.0f, 1.0f, 1.0f, 8.0f);
+    colors[ImGuiCol_TableBorderStrong] = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 }
