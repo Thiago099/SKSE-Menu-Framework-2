@@ -40,6 +40,14 @@ LRESULT UI::WndProcHook::thunk(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     return func(hWnd, uMsg, wParam, lParam);
 }
 
+
+void UI::D3DInitHook::loadTexture() {
+    if (!device || !context) return;
+
+    //DirectX::CreateWICTextureFromFile(device, context, L"texture.jpg", nullptr, &texture);
+    DirectX::CreateDDSTextureFromFile(device, context, L"texture.dds", nullptr, &texture);
+}
+
 void UI::D3DInitHook::thunk() {
     logger::debug("[D3DInitHook] START");
 
@@ -62,8 +70,8 @@ void UI::D3DInitHook::thunk() {
         SKSE::log::error("IDXGISwapChain::GetDesc failed.");
         return;
     }
-    const auto device = (ID3D11Device*)renderer->data.forwarder;
-    const auto context = (ID3D11DeviceContext*)renderer->data.context;
+    device = (ID3D11Device*)renderer->data.forwarder;
+    context = (ID3D11DeviceContext*)renderer->data.context;
 
     SKSE::log::info("Initializing ImGui...");
 
@@ -111,6 +119,10 @@ void UI::D3DInitHook::thunk() {
     fontSizes["Default"] = regular; 
 
     io.Fonts->Build();
+
+
+    loadTexture();
+
 
 
     logger::debug("[D3DInitHook] FINISH");

@@ -9,8 +9,8 @@
 #include "imgui_impl_win32.h"
 #include "dxgi.h"
 #include "imgui_internal.h"
-
-
+#include "DirectXTK/WICTextureLoader.h"
+#include "DirectXTK/DDSTextureLoader.h"
 namespace GameLock {
     enum State { None, Locked, Unlocked };
     extern State lastState;
@@ -76,6 +76,13 @@ namespace UI {
     };
 
     struct D3DInitHook {
+        static inline ID3D11Device* device = NULL;
+        static inline ID3D11DeviceContext* context = NULL;
+
+
+        static inline ID3D11ShaderResourceView* texture;
+        static void loadTexture();
+
         static void thunk();
         static inline REL::Relocation<decltype(thunk)> originalFunction;
     };

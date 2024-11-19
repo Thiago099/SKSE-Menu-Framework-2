@@ -83,6 +83,10 @@ target_include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends
 )
 
+#TODO: This must be adjusted for release
+
+find_library(DIRECTXTK_LIBRARY NAMES DirectXTK PATHS ${CMAKE_BINARY_DIR}/debug/vcpkg_installed/x64-windows-static/lib)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${DIRECTXTK_LIBRARY})
 
 set(wildlander_output false)
 set(steam_owrt_output false)
