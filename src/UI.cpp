@@ -117,7 +117,12 @@ void __stdcall UI::RenderMenuWindow() {
     ImGui::SameLine();
     ImGui::BeginChild("SKSEModControlPanelMenuNode", ImVec2(0, -FLT_MIN), ImGuiChildFlags_Border, window_flags);
 
-    ImGui::Image(UI::D3DInitHook::texture, ImVec2(640, 480));
+
+    ImVec2 uv0(0.1f, 0.1f); 
+    ImVec2 uv1(0.3f, 0.3f); 
+    ImVec2 size(100.0f, 100.0f);
+
+    ImGui::Image(UI::D3DInitHook::texture, ImVec2(640, 480), uv0, uv1);
 
     if (display_node) {
         display_node->Render();
