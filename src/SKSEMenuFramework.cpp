@@ -111,6 +111,18 @@ void PushBrands()
 
 void Pop() { UI::CleanFont(); }
 
+unsigned long LoadWICTextureAtlas(const wchar_t* imagePath, const wchar_t* uvwPath) { 
+    return Textures::LoadWIC(imagePath, uvwPath);
+}
+
+unsigned long LoadDDSTextureAtlas(const wchar_t* imagePath, const wchar_t* uvwPath) {
+    return Textures::LoadDDS(imagePath, uvwPath);
+}
+
+void RenderTextureFromAtlas(unsigned long idTexture, unsigned long idAsset, ImVec2 size, int color, float alpha) {
+    Textures::Render(idTexture, idAsset, size, color, alpha);
+}
+
 
 ImTextureID LoadTextureFromDDSFile(const wchar_t* path) {
     return UI::D3DInitHook::LoadTextureFromDDSFile(path);    

@@ -11,6 +11,7 @@
 #include "imgui_internal.h"
 #include "DirectXTK/WICTextureLoader.h"
 #include "DirectXTK/DDSTextureLoader.h"
+#include "File.h"
 
 namespace GameLock {
     enum State { None, Locked, Unlocked };

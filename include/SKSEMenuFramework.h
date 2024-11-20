@@ -1,5 +1,6 @@
 #pragma once
 #include <imgui.h>
+#include "Textures.h"
 
 #include "Application.h"
 #include "Renderer.h"
@@ -22,3 +23,7 @@ FUNCTION_PREFIX void PushSolid();
 FUNCTION_PREFIX void PushRegular();
 FUNCTION_PREFIX void PushBrands();
 FUNCTION_PREFIX void Pop();
+
+FUNCTION_PREFIX unsigned long LoadWICTextureAtlas(const wchar_t* imagePath, const wchar_t* uvwPath);
+FUNCTION_PREFIX unsigned long LoadDDSTextureAtlas(const wchar_t* imagePath, const wchar_t* uvwPath);
+FUNCTION_PREFIX void RenderTextureFromAtlas(unsigned long idTexture, unsigned long idAsset, ImVec2 size, int color, float alpha);

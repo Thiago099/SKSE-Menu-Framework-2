@@ -10,7 +10,9 @@ set(headers ${headers}
 	include/Renderer.h
 	include/SKSEMenuFramework.h
 	include/UI.h
+	include/Textures.h
 	include/cimgui.h
+	include/File.h
 	imgui/backends/imgui_impl_dx11.h
     imgui/backends/imgui_impl_win32.h
     imgui/imconfig.h

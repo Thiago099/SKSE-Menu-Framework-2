@@ -1,9 +1,4 @@
 
-# This makes norton happy again
-
-set(CMAKE_CXX_COMPILER "${CCOMPILER_PATH}")
-set(CMAKE_C_COMPILER "${CCOMPILER_PATH}")
-
 if(NOT DEFINED ENV{COMMONLIB_SSE_FOLDER})
   message(FATAL_ERROR "Missing COMMONLIB_SSE_FOLDER environment variable")
 endif()

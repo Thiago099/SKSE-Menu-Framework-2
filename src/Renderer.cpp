@@ -40,9 +40,12 @@ LRESULT UI::WndProcHook::thunk(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
     return func(hWnd, uMsg, wParam, lParam);
 }
 
-
 ID3D11ShaderResourceView* UI::D3DInitHook::LoadTextureFromDDSFile(const wchar_t* path) {
-    if (!device || !context) return nullptr;
+    if (!device || !context) return NULL;
+
+    if (!File::Exists(path)) {
+        return NULL;
+    }
 
     ID3D11ShaderResourceView* texture;
 
@@ -52,7 +55,11 @@ ID3D11ShaderResourceView* UI::D3DInitHook::LoadTextureFromDDSFile(const wchar_t*
 }
 
 ID3D11ShaderResourceView* UI::D3DInitHook::LoadTextureFromWICFile(const wchar_t* path) {
-    if (!device || !context) return nullptr;
+    if (!device || !context) return NULL;
+
+    if (!File::Exists(path)) {
+        return NULL;
+    }
 
     ID3D11ShaderResourceView* texture;
 

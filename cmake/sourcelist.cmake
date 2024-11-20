@@ -6,6 +6,7 @@ set(sources ${sources}
 	src/Renderer.cpp
 	src/SKSEMenuFramework.cpp
 	src/UI.cpp
+	src/Textures.cpp
 	src/cimgui.cpp
 	imgui/backends/imgui_impl_dx11.cpp
     imgui/backends/imgui_impl_win32.cpp
