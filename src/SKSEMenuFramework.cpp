@@ -110,3 +110,12 @@ void PushBrands()
 }
 
 void Pop() { UI::CleanFont(); }
+
+
+ImTextureID LoadTextureFromDDSFile(const wchar_t* path) {
+    return UI::D3DInitHook::LoadTextureFromDDSFile(path);    
+}
+
+ImTextureID LoadTextureFromWICFile(const wchar_t* path) {
+    return UI::D3DInitHook::LoadTextureFromWICFile(path);
+}

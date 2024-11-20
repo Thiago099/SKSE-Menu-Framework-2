@@ -10,6 +10,9 @@ FUNCTION_PREFIX void AddSectionItem(const char* path, UI::RenderFunction rendere
 FUNCTION_PREFIX UI::WindowInterface* AddWindow(UI::RenderFunction rendererFunction);
 FUNCTION_PREFIX unsigned long WindowAddOpenCloseEvent(UI::WindowInterface* window, UI::OpenCloseCallback callback);
 FUNCTION_PREFIX void WindowRemoveOpenCloseEvent(UI::WindowInterface* window, long id);
+
+FUNCTION_PREFIX ImTextureID LoadTextureFromDDSFile(const wchar_t* path);
+FUNCTION_PREFIX ImTextureID LoadTextureFromWICFile(const wchar_t* path);
 FUNCTION_PREFIX void WindowOpen(UI::WindowInterface* window);
 FUNCTION_PREFIX void WindowClose(UI::WindowInterface* window);
 FUNCTION_PREFIX void PushBig();

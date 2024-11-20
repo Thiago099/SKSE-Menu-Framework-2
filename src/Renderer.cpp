@@ -41,11 +41,24 @@ LRESULT UI::WndProcHook::thunk(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-void UI::D3DInitHook::loadTexture() {
-    if (!device || !context) return;
+ID3D11ShaderResourceView* UI::D3DInitHook::LoadTextureFromDDSFile(const wchar_t* path) {
+    if (!device || !context) return nullptr;
 
-    //DirectX::CreateWICTextureFromFile(device, context, L"texture.jpg", nullptr, &texture);
-    DirectX::CreateDDSTextureFromFile(device, context, L"texture.dds", nullptr, &texture);
+    ID3D11ShaderResourceView* texture;
+
+    DirectX::CreateDDSTextureFromFile(device, context, path, nullptr, &texture);
+
+    return texture;
+}
+
+ID3D11ShaderResourceView* UI::D3DInitHook::LoadTextureFromWICFile(const wchar_t* path) {
+    if (!device || !context) return nullptr;
+
+    ID3D11ShaderResourceView* texture;
+
+    DirectX::CreateWICTextureFromFile(device, context, path, nullptr, &texture);
+
+    return texture;
 }
 
 void UI::D3DInitHook::thunk() {
@@ -119,11 +132,6 @@ void UI::D3DInitHook::thunk() {
     fontSizes["Default"] = regular; 
 
     io.Fonts->Build();
-
-
-    loadTexture();
-
-
 
     logger::debug("[D3DInitHook] FINISH");
 }

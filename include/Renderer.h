@@ -11,6 +11,7 @@
 #include "imgui_internal.h"
 #include "DirectXTK/WICTextureLoader.h"
 #include "DirectXTK/DDSTextureLoader.h"
+
 namespace GameLock {
     enum State { None, Locked, Unlocked };
     extern State lastState;
@@ -80,8 +81,8 @@ namespace UI {
         static inline ID3D11DeviceContext* context = NULL;
 
 
-        static inline ID3D11ShaderResourceView* texture;
-        static void loadTexture();
+        static ID3D11ShaderResourceView* LoadTextureFromDDSFile(const wchar_t* path);
+        static ID3D11ShaderResourceView* LoadTextureFromWICFile(const wchar_t* path);
 
         static void thunk();
         static inline REL::Relocation<decltype(thunk)> originalFunction;
