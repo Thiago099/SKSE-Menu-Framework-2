@@ -1,4 +1,4 @@
-#include "Config.h"
+﻿#include "Config.h"
 
 unsigned int Config::ToggleKey = 0x3B;
 uint8_t Config::ToggleMode = 0;
@@ -7,6 +7,12 @@ uint8_t Config::ToggleModeGamePad = 0;
 bool Config::FreezeTimeOnMenu = true;
 MenuStyle Config::MenuStyle = MenuStyle::Skyrim;
 bool Config::BlurBackgroundOnMenu = true;
+std::string Config::PrimaryFont = "CN.ttf";  
+bool Config::EnableChinese = true;                                
+bool Config::EnableJapanese = false;
+bool Config::EnableKorean = false;
+bool Config::EnableCyrillic = false;
+bool Config::EnableThai = false;
 
 char* toUpperCase(const char* str) {
     if (str == nullptr) {
@@ -45,6 +51,16 @@ void Config::Init() {
         Config::MenuStyle = MenuStyle::Classic;
     }
 
+    ini->SetSection("Fonts");  
+    PrimaryFont = ini->GetString("PrimaryFont", "CN.ttf");
+    EnableChinese = ini->GetBool("EnableChinese", true);
+    EnableJapanese = ini->GetBool("EnableJapanese", false);
+    EnableKorean = ini->GetBool("EnableKorean", false);
+    EnableCyrillic = ini->GetBool("EnableCyrillic", false);
+    EnableThai = ini->GetBool("EnableThai", false);
+
+
+
     delete ini;
-    delete menuStyleStr;
+    delete[] menuStyleStr;
 }

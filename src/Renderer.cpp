@@ -1,4 +1,4 @@
-#include "Renderer.h"
+﻿#include "Renderer.h"
 
 std::vector<UI::Window*> UI::Windows;
 
@@ -244,36 +244,76 @@ ImFont* GetFont(ImGuiIO& io, std::string name, float size,
 #define ICON_MIN_FA 0xe005
 #define ICON_MAX_FA 0xf8ff
 
-UI::FontContainer UI::LoadFontAwesome(ImGuiIO& io, float size) {
+#include <map>  // 需要包含 map 头文件
+#include <vector>
 
+#include "Config.h"
+#include "imgui_internal.h"
+
+// =========================================================================
+// 将字形范围数据存储在一个静态 map 中，而不是函数内的单个静态 vector。
+// 这样可以确保每个不同的字体大小（key: float）都有自己独立的、持久的字形范围向量（value: ImVector<ImWchar>）。
+// =========================================================================
+static std::map<float, ImVector<ImWchar>> persistentGlyphRanges;
+
+UI::FontContainer UI::LoadFontAwesome(ImGuiIO& io, float size) {
     auto result = FontContainer();
 
-    if (auto skyrimFont = GetFont(io, "SkyrimMenuFont.ttf", size)) {
-        result.defaultFont = skyrimFont;
+    SKSE::log::info("FontLoader: Begin loading process for font size {}.", size);
+
+    // 检查是否已经为这个字号构建过字形范围
+    if (persistentGlyphRanges.find(size) == persistentGlyphRanges.end()) {
+        SKSE::log::info("FontLoader: No cached glyph ranges for size {}. Building new ones...", size);
+
+        // 如果没有，就使用 Builder 构建一次
+        ImFontGlyphRangesBuilder builder;
+        builder.AddRanges(io.Fonts->GetGlyphRangesDefault());  // 基础英文
+
+        if (Config::EnableChinese) builder.AddRanges(io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+        if (Config::EnableJapanese) builder.AddRanges(io.Fonts->GetGlyphRangesJapanese());
+        if (Config::EnableKorean) builder.AddRanges(io.Fonts->GetGlyphRangesKorean());
+        if (Config::EnableCyrillic) builder.AddRanges(io.Fonts->GetGlyphRangesCyrillic());
+        if (Config::EnableThai) builder.AddRanges(io.Fonts->GetGlyphRangesThai());
+
+        // 将构建好的结果存入持久化 map 中
+        // map[key] = value 的语法会自动为我们创建条目
+        builder.BuildRanges(&persistentGlyphRanges[size]);
+
+        SKSE::log::info("FontLoader: Glyph ranges for size {} successfully built and cached.", size);
+    } else {
+        SKSE::log::info("FontLoader: Using cached glyph ranges for size {}.", size);
     }
+
+    // =========================================================================
+    //                            字体加载部分
+    // =========================================================================
+
+    ImFontConfig font_config;
+    font_config.PixelSnapH = true;
+
+    // 从 map 中获取对应字号的、绝对安全的字形范围指针
+    result.defaultFont =
+        GetFont(io, Config::PrimaryFont.c_str(), size, &font_config, persistentGlyphRanges.at(size).Data);
+
+    // 回退机制
+    if (!result.defaultFont) {
+        SKSE::log::warn("Primary font '{}' failed to load. Falling back to SkyrimMenuFont.ttf.", Config::PrimaryFont);
+        result.defaultFont = GetFont(io, "SkyrimMenuFont.ttf", size, nullptr, io.Fonts->GetGlyphRangesDefault());
+    }
+
+    // 合并默认字体和 Font Awesome 图标
+    ImFontConfig merge_config;
+    merge_config.MergeMode = true;
+    merge_config.PixelSnapH = true;
+
+    GetFont(io, "SkyrimMenuFont.ttf", size, &merge_config, io.Fonts->GetGlyphRangesDefault());
 
     static const ImWchar icons_ranges[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
+    GetFont(io, "fa-solid-900.ttf", size, &merge_config, icons_ranges);
+    GetFont(io, "fa-regular-400.ttf", size, &merge_config, icons_ranges);
+    GetFont(io, "fa-brands-400.ttf", size, &merge_config, icons_ranges);
 
-    ImFontConfig icons_config;
-    icons_config.MergeMode = true;
-    icons_config.PixelSnapH = true;
-
-    if (auto regularFont = GetFont(io, "SkyrimMenuFont.ttf", size, NULL, io.Fonts->GetGlyphRangesDefault())) {
-        if (GetFont(io, "fa-regular-400.ttf", size, &icons_config, icons_ranges)) {
-            result.faRegular = regularFont;
-        }
-    }
-    if (auto solidFont = GetFont(io, "SkyrimMenuFont.ttf", size, NULL, io.Fonts->GetGlyphRangesDefault())) {
-        if (GetFont(io, "fa-solid-900.ttf", size, &icons_config, icons_ranges)) {
-            result.faSolid = solidFont;
-        }
-    }
-    if (auto brandsFont = GetFont(io, "SkyrimMenuFont.ttf", size, NULL, io.Fonts->GetGlyphRangesDefault())) {
-        if (GetFont(io, "fa-brands-400.ttf", size, &icons_config, icons_ranges)) {
-            result.faBrands = brandsFont;
-        }
-    }
-
+    SKSE::log::info("Font loading process for size {} completed.", size);
     return result;
 }
 void UI::CleanFontStack() {
