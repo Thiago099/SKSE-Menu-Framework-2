@@ -50,8 +50,8 @@ void UI::D3DInitHook::thunk() {
         SKSE::log::error("couldn't find renderer");
         return;
     }
-
-    const auto swapChain = (IDXGISwapChain*)renderer->data.renderWindows[0].swapChain;
+    auto data = renderer->GetRuntimeData();
+    const auto swapChain = reinterpret_cast<IDXGISwapChain*>(data.renderWindows[0].swapChain);
     if (!swapChain) {
         SKSE::log::error("couldn't find swapChain");
         return;
@@ -62,8 +62,8 @@ void UI::D3DInitHook::thunk() {
         SKSE::log::error("IDXGISwapChain::GetDesc failed.");
         return;
     }
-    const auto device = (ID3D11Device*)renderer->data.forwarder;
-    const auto context = (ID3D11DeviceContext*)renderer->data.context;
+    const auto device = reinterpret_cast<ID3D11Device*>(data.forwarder);
+    const auto context = reinterpret_cast<ID3D11DeviceContext*>(data.context);
 
     SKSE::log::info("Initializing ImGui...");
 
