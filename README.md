@@ -4,7 +4,13 @@
 
 - COMMONLIB_SSE_FOLDER
 
-  Clone [this](https://github.com/CharmedBaryon/CommonLibSSE-NG) Repository, to somewhere safe and adds its path to this environment variable on Windows.
+  Clone [this](https://github.com/alandtse/CommonLibVR) Repository, to somewhere safe and adds its path to this environment variable on Windows.
+
+```bash
+git clone --recursive https://github.com/alandtse/CommonLibVR
+cd CommonLibVR
+git checkout sse
+```
   
 ## Optional ouput folder optional variables
 

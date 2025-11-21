@@ -106,7 +106,7 @@ namespace UI {
     };
 
     inline std::map<std::string, FontContainer> fontSizes;
-    FontContainer LoadFontAwesome(ImGuiIO& io, float size);
+    FontContainer LoadFonts(ImGuiIO& io, float size);
 
     void CleanFontStack();
     void CleanFont();

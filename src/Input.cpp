@@ -302,7 +302,7 @@ void UI::TranslateInputEvent(RE::InputEvent* const* a_event) {
         if (auto button = event->AsButtonEvent()) {
             TranslateButtonEvent(io, button);
         } else if (auto charEvent = event->AsCharEvent()) {
-            io.AddInputCharacter(charEvent->keycode);
+            io.AddInputCharacter(charEvent->keyCode);
         }
     }
 }
