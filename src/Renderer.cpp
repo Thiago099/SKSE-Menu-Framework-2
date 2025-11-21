@@ -244,16 +244,16 @@ ImFont* GetFont(ImGuiIO& io, std::string name, float size,
 #define ICON_MIN_FA 0xe005
 #define ICON_MAX_FA 0xf8ff
 
-#include <map>  // 需要包含 map 头文件
+#include <map>
 #include <vector>
 
 #include "Config.h"
 #include "imgui_internal.h"
 
 // =========================================================================
-// 将字形范围数据存储在一个静态 map 中，而不是函数内的单个静态 vector。
-// 这样可以确保每个不同的字体大小（key: float）都有自己独立的、持久的字形范围向量（value: ImVector<ImWchar>）。
-// =========================================================================
+// Store glyph range data in a static map, instead of a single static vector within the function.
+// This ensures that each different font size (key: float) has its own independent, persistent glyph range vector (value: ImVector<ImWchar>).
+// ============================================================================
 static std::map<float, ImVector<ImWchar>> persistentGlyphRanges;
 
 UI::FontContainer UI::LoadFontAwesome(ImGuiIO& io, float size) {
@@ -261,13 +261,12 @@ UI::FontContainer UI::LoadFontAwesome(ImGuiIO& io, float size) {
 
     SKSE::log::info("FontLoader: Begin loading process for font size {}.", size);
 
-    // 检查是否已经为这个字号构建过字形范围
+    // Check if a glyph range has already been constructed for this font size.
     if (persistentGlyphRanges.find(size) == persistentGlyphRanges.end()) {
         SKSE::log::info("FontLoader: No cached glyph ranges for size {}. Building new ones...", size);
 
-        // 如果没有，就使用 Builder 构建一次
         ImFontGlyphRangesBuilder builder;
-        builder.AddRanges(io.Fonts->GetGlyphRangesDefault());  // 基础英文
+        builder.AddRanges(io.Fonts->GetGlyphRangesDefault());  // Basic English
 
         if (Config::EnableChinese) builder.AddRanges(io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
         if (Config::EnableJapanese) builder.AddRanges(io.Fonts->GetGlyphRangesJapanese());
@@ -275,8 +274,6 @@ UI::FontContainer UI::LoadFontAwesome(ImGuiIO& io, float size) {
         if (Config::EnableCyrillic) builder.AddRanges(io.Fonts->GetGlyphRangesCyrillic());
         if (Config::EnableThai) builder.AddRanges(io.Fonts->GetGlyphRangesThai());
 
-        // 将构建好的结果存入持久化 map 中
-        // map[key] = value 的语法会自动为我们创建条目
         builder.BuildRanges(&persistentGlyphRanges[size]);
 
         SKSE::log::info("FontLoader: Glyph ranges for size {} successfully built and cached.", size);
@@ -285,23 +282,23 @@ UI::FontContainer UI::LoadFontAwesome(ImGuiIO& io, float size) {
     }
 
     // =========================================================================
-    //                            字体加载部分
+    //                            Font loading section
     // =========================================================================
 
     ImFontConfig font_config;
     font_config.PixelSnapH = true;
 
-    // 从 map 中获取对应字号的、绝对安全的字形范围指针
+    // Retrieve a pointer to the absolutely safe glyph range for the corresponding font size from the map.
     result.defaultFont =
         GetFont(io, Config::PrimaryFont.c_str(), size, &font_config, persistentGlyphRanges.at(size).Data);
 
-    // 回退机制
+    // rollback mechanism
     if (!result.defaultFont) {
         SKSE::log::warn("Primary font '{}' failed to load. Falling back to SkyrimMenuFont.ttf.", Config::PrimaryFont);
         result.defaultFont = GetFont(io, "SkyrimMenuFont.ttf", size, nullptr, io.Fonts->GetGlyphRangesDefault());
     }
 
-    // 合并默认字体和 Font Awesome 图标
+    // Merge default font and Font Awesome icon
     ImFontConfig merge_config;
     merge_config.MergeMode = true;
     merge_config.PixelSnapH = true;
