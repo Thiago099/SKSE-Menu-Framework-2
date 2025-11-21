@@ -17,4 +17,10 @@ class Config {
     static bool FreezeTimeOnMenu;
     static bool BlurBackgroundOnMenu;
     static MenuStyle MenuStyle;
+    static std::string PrimaryFont;
+    static bool EnableChinese;
+    static bool EnableJapanese;
+    static bool EnableKorean;
+    static bool EnableCyrillic;
+    static bool EnableThai;
 };
