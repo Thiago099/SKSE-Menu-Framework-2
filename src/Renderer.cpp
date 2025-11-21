@@ -103,11 +103,11 @@ void UI::D3DInitHook::thunk() {
         ModernStyle();
     }
 
-    auto regular = LoadFontAwesome(io, 32.0f);
+    auto regular = LoadFonts(io, 32.0f);
     io.FontDefault = regular.defaultFont;
 
-    fontSizes["Big"] = LoadFontAwesome(io, 64.0f);
-    fontSizes["Small"] = LoadFontAwesome(io, 16.0f);
+    fontSizes["Big"] = LoadFonts(io, 64.0f);
+    fontSizes["Small"] = LoadFonts(io, 16.0f);
     fontSizes["Default"] = regular; 
 
     io.Fonts->Build();
@@ -256,7 +256,7 @@ ImFont* GetFont(ImGuiIO& io, std::string name, float size,
 // ============================================================================
 static std::map<float, ImVector<ImWchar>> persistentGlyphRanges;
 
-UI::FontContainer UI::LoadFontAwesome(ImGuiIO& io, float size) {
+UI::FontContainer UI::LoadFonts(ImGuiIO& io, float size) {
     auto result = FontContainer();
 
     SKSE::log::info("FontLoader: Begin loading process for font size {}.", size);
