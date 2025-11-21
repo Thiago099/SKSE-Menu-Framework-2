@@ -1,4 +1,5 @@
 ﻿#include "Config.h"
+#include "Application.h"
 
 unsigned int Config::ToggleKey = 0x3B;
 uint8_t Config::ToggleMode = 0;

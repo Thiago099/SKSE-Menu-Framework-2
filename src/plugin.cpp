@@ -1,5 +1,8 @@
-#include "Plugin.h"
-
+#include "Hooks.h"
+#include "Config.h"
+#include "Logger.h"
+#include "UI.h"
+#include "SKSEMenuFramework.h"
 
 SKSEPluginLoad(const SKSE::LoadInterface *skse) {
 
@@ -7,9 +10,7 @@ SKSEPluginLoad(const SKSE::LoadInterface *skse) {
     logger::info("Plugin loaded");
     SKSE::Init(skse);
     Config::Init();
-    auto builder = UI::Renderer::GetBuilder();
-    builder->Install();
-    delete builder;
-    UI::MainInterface = AddWindow(UI::RenderMenuWindow);
+    WindowManager::MainInterface = AddWindow(UI::RenderMenuWindow);
+    Hooks::Install();
     return true;
 }

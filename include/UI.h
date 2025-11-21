@@ -1,6 +1,7 @@
 #pragma once
-#include <imgui.h>
-#include "Renderer.h"
+
+#include "WindowManager.h"
+
 namespace UI {
     class MenuTree {
     public:
@@ -11,5 +12,5 @@ namespace UI {
     };
     extern UI::MenuTree* RootMenu;
     void __stdcall RenderMenuWindow();
-    void AddToTree(UI::MenuTree* node, std::vector<std::string>& path, UI::RenderFunction render, std::string title);
+    void AddToTree(UI::MenuTree* node, std::vector<std::string>& path, RenderFunction render, std::string title);
 }

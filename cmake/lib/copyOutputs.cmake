@@ -18,7 +18,7 @@ function(copyOutputs TARGET_FOLDER)
     )
 
     # If you perform a "Debug" build, also copy .pdb file (for debug symbols)
-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
         add_custom_command(
             TARGET "${PROJECT_NAME}"
             POST_BUILD
@@ -26,5 +26,16 @@ function(copyOutputs TARGET_FOLDER)
             VERBATIM
         )
     endif()
+
+
+    set(PUBLIC_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/public")
+    set(PUBLIC_OUTPUT_DIR "${TARGET_FOLDER}")
+
+    add_custom_command(
+        TARGET "${PROJECT_NAME}"
+        POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E copy_directory "${PUBLIC_SOURCE_DIR}" "${PUBLIC_OUTPUT_DIR}"
+        VERBATIM
+    )
 
 endfunction()

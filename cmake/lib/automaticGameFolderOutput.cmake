@@ -16,5 +16,8 @@ function(automaticGameFolderOutput wildlander_output steam_owrt_output steam_mod
     if(DEFINED ENV{SKYRIM_MODS_FOLDER2} AND IS_DIRECTORY "$ENV{SKYRIM_MODS_FOLDER2}" AND steam_mods_output)
         copyOutputs("$ENV{SKYRIM_MODS_FOLDER2}/${BEAUTIFUL_NAME}${PROJECT_SUFFIX}")
     endif()
+    if(DEFINED ENV{SKYRIM_MODS_FOLDER3} AND IS_DIRECTORY "$ENV{SKYRIM_MODS_FOLDER3}" AND steam_mods_output)
+        copyOutputs("$ENV{SKYRIM_MODS_FOLDER3}/${BEAUTIFUL_NAME}${PROJECT_SUFFIX}")
+    endif()
 
 endfunction()

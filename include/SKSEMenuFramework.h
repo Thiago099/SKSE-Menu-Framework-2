@@ -1,13 +1,10 @@
 #pragma once
-#include <imgui.h>
 
-#include "Application.h"
-#include "Renderer.h"
-#include "UI.h"
+#include "WindowManager.h"
 #define FUNCTION_PREFIX extern "C" [[maybe_unused]] __declspec(dllexport)
 
-FUNCTION_PREFIX void AddSectionItem(const char* path, UI::RenderFunction rendererFunction);
-FUNCTION_PREFIX UI::WindowInterface* AddWindow(UI::RenderFunction rendererFunction);
+FUNCTION_PREFIX void AddSectionItem(const char* path, RenderFunction rendererFunction);
+FUNCTION_PREFIX WindowInterface* AddWindow(RenderFunction rendererFunction);
 FUNCTION_PREFIX void PushBig();
 FUNCTION_PREFIX void PushDefault();
 FUNCTION_PREFIX void PushSmall();

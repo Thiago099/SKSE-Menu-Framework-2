@@ -1,10 +1,6 @@
 #pragma once
-#include "Model.h"
+
 #include "SimpleIni.h"
-#include "combaseapi.h"
-#include "Renderer.h"
-
-
 
 std::vector<std::string> SplitString(const std::string& input, char delimiter);
 

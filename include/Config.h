@@ -1,5 +1,4 @@
 #pragma once
-#include "Application.h"
 
 enum MenuStyle {
     Skyrim,

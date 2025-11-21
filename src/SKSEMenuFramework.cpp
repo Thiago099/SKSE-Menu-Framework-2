@@ -1,69 +1,70 @@
 #include "SKSEMenuFramework.h"
-
-
-void AddSectionItem(const char* path, UI::RenderFunction rendererFunction) { 
+#include "FontManager.h"
+#include <imgui.h>
+#include "Application.h"
+#include "Renderer.h"
+#include "UI.h"
+void AddSectionItem(const char* path, RenderFunction rendererFunction) { 
     auto pathSplit = SplitString(path, '/');
     AddToTree(UI::RootMenu, pathSplit, rendererFunction, pathSplit.back());
 }
 
-UI::WindowInterface* AddWindow(UI::RenderFunction rendererFunction) { 
+WindowInterface* AddWindow(RenderFunction rendererFunction) { 
 
-    auto newWindow = new UI::Window();
+    auto newWindow = new Window();
 
     newWindow->Render = rendererFunction;
 
-    UI::Windows.push_back(newWindow);
+    WindowManager::Windows.push_back(newWindow);
 
     return newWindow->Interface;
 
 }
 
-
-
 void PushDefault() 
 {
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeBig);
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeSmall);
-    UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::fontSizeDefault);
-    UI::ProcessFont();
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::fontSizeBig);
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::fontSizeSmall);
+    FontManager::currentFont = (Font)(FontManager::currentFont | Font::fontSizeDefault);
+    FontManager::ProcessFont();
 }
 void PushBig() 
 {
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeDefault);
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeSmall);
-    UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::fontSizeBig);
-    UI::ProcessFont();
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::fontSizeDefault);
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::fontSizeSmall);
+    FontManager::currentFont = (Font)(FontManager::currentFont | Font::fontSizeBig);
+    FontManager::ProcessFont();
 }
 void PushSmall() 
 {
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeDefault);
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::fontSizeBig);
-    UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::fontSizeSmall);
-    UI::ProcessFont();
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::fontSizeDefault);
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::fontSizeBig);
+    FontManager::currentFont = (Font)(FontManager::currentFont | Font::fontSizeSmall);
+    FontManager::ProcessFont();
 }
 
 void PushSolid() 
 {
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faBrands);
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faRegular);
-    UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::faSolid);
-    UI::ProcessFont();
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::faBrands);
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::faRegular);
+    FontManager::currentFont = (Font)(FontManager::currentFont | Font::faSolid);
+    FontManager::ProcessFont();
 }
 
 void PushRegular() 
 {
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faSolid);
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faBrands);
-    UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::faRegular);
-    UI::ProcessFont();
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::faSolid);
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::faBrands);
+    FontManager::currentFont = (Font)(FontManager::currentFont | Font::faRegular);
+    FontManager::ProcessFont();
 }
 
 void PushBrands() 
 {
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faSolid);
-    UI::currentFont = (UI::Font)(UI::currentFont & ~UI::Font::faRegular);
-    UI::currentFont = (UI::Font)(UI::currentFont | UI::Font::faBrands);
-    UI::ProcessFont();
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::faSolid);
+    FontManager::currentFont = (Font)(FontManager::currentFont & ~Font::faRegular);
+    FontManager::currentFont = (Font)(FontManager::currentFont | Font::faBrands);
+    FontManager::ProcessFont();
 }
 
-void Pop() { UI::CleanFont(); }
+void Pop() { FontManager::CleanFont(); }

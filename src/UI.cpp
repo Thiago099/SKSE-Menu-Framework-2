@@ -1,4 +1,7 @@
 #include "UI.h"
+#include "WindowManager.h"
+#include <imgui.h>
+#include "Renderer.h"
 
 static ImGuiTextFilter filter;
 
@@ -123,7 +126,7 @@ void __stdcall UI::RenderMenuWindow() {
     ImGui::End();
 }
 
-void UI::AddToTree(UI::MenuTree* node, std::vector<std::string>& path, UI::RenderFunction render, std::string title) {
+void UI::AddToTree(UI::MenuTree* node, std::vector<std::string>& path, RenderFunction render, std::string title) {
     if (!path.empty()) {
         auto currentName = path.front();
         path.erase(path.begin());
